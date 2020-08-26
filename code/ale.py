@@ -3,7 +3,7 @@ import os.path as op
 import argparse
 import numpy as np
 import nibabel as nib
-from nimare.io improt convert_sleuth_to_dataset
+from nimare.io import convert_sleuth_to_dataset
 from glob import glob
 from nimare.correct import FWECorrector
 from nimare.meta.ale import ALE, ALESubtraction
