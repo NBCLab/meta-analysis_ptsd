@@ -1,6 +1,6 @@
 //Reference=MNI
 //Bossini et al., 2017; HCs > PTSD		
-// Subjects:19		
+// Subjects=19		
 -17	-22	-20
 2	23	55
 18	24	48
@@ -8,13 +8,13 @@
 -12	26	55
 		
 //Cheng et al., 2015; HCs > PTSD		
-// Subjects:30		
+// Subjects=30		
 -5	-4	-9
 -54	-45	40
 53	-25	-23
 		
 //O'Dohetry et al., 2017; HCs > PTSD		
-// Subjects:25		
+// Subjects=25		
 -22	-2	-28
 28	-2	-28
 0	34	-8
@@ -43,11 +43,11 @@
 -2	-4	-2
 			
 //Chen et al., 2012; HCs > PTSD		
-// Subjects:10		
+// Subjects=10		
 -6	26	20
 		
 //Eckart et al., 2011; HCs > PTSD		
-// Subjects:13		
+// Subjects=13		
 -10	-48	28
 30	-80	32
 34	-80	20
@@ -55,11 +55,11 @@
 16	40	16
 		
 //Hakamata et al., 2007; HCs > PTSD		
-// Subjects:14		
+// Subjects=14		
 14	51	-27
 		
 //Sui et al., 2010; HCs > PTSD		
-// Subjects:11		
+// Subjects=11		
 -9	68	11
 4	64	-4
 -31	54	2
@@ -67,7 +67,7 @@
 -31	-82	-18
 		
 //Tavanti et al., 2012; HCs > PTSD		
-// Subjects:25		
+// Subjects=25		
 -11.03	-49.19	2.7
 14.71	-47.38	2.74
 -19.16	54.88	21.64

@@ -1,6 +1,6 @@
 //Reference=MNI
 //O'Dohetry et al., 2017; TrauE > PTSD		
-// Subjects:25		
+// Subjects=25		
 -18	-2	-24
 26	-2	-28
 -4	34	2
@@ -29,31 +29,31 @@
 
 		
 //Rocha-Rego et al., 2012; TrauE > PTSD		
-// Subjects:16		
+// Subjects=16		
 53	-1	35
 -12	54	10
 31	-76	47
 53	-25	-3
 		
 //Chao et al., 2012; TrauE > PTSD		
-// Subjects:20		
+// Subjects=20		
 -36	8	31
 -17	-78	19
 50	-46	28
 		
 //Hakamata et al., 2007; TrauE > PTSD		
-// Subjects:14		
+// Subjects=14		
 17	48	-38
 		
 //Herringa et al., 2012; TrauE > PTSD		
-// Subjects:13		
+// Subjects=13		
 10	8	-14
 -32	-12	18
 38	42	14
 -64	-26	-10
 		
 //Kasi et al., 2008; TrauE > PTSD		
-// Subjects:18		
+// Subjects=18		
 44	-2	-14
 -62	-56	-4
 34	-28	-16
@@ -63,7 +63,7 @@
 -64	-44	10
 		
 //Nardo et al., 2010; TrauE > PTSD		
-// Subjects:21		
+// Subjects=21		
 -10	-60	3
 -23	-57	-2
 -17	-55	32
@@ -71,30 +71,30 @@
 7	-50	2
 		
 //Sui et al., 2010; TrauE > PTSD	
-// Subjects:8		
+// Subjects=8		
 27	-10	-35
 -55	-1	-26
 -54	-1	-27
 
 //Zhang et al., 2011; TrauE > PTSD		
-// Subjects:10		
+// Subjects=10		
 -17	-9	-26
 5	-81	15
 -12	-67	17
 		
 //Flemingham et al., 2009; TrauE > PTSD		
-// Subjects:17		
+// Subjects=17		
 -34	-14	-12
 34	-14	-12
 -2	50	8
 0	46	0
 
 //Zhang et al., 2018; TrauE > PTSD		
-// Subjects:35		
+// Subjects=35		
 48	24	-29
 		
 //Kroes et al., 2011; TrauE > PTSD		
-// Subjects:24		
+// Subjects=24		
 2	-7	41
 3	54	30
 34	25	52
@@ -109,6 +109,6 @@
 -6	46	7
 	
 //Qi et al., 2020; TrauE > PTSD		
-// Subjects:57		
+// Subjects=57		
 -6	52.5	0
 33	49.5	19.5

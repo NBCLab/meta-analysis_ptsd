@@ -8,16 +8,17 @@ from glob import glob
 from nimare.correct import FWECorrector
 from nimare.meta.ale import ALE, ALESubtraction
 
-project_dir = '/home/data/nbc/misc-projects/meta-analysis/ptsd'
+
+project_dir = '/home/data/nbc/misc-projects/meta-analyses/meta-analysis_ptsd'
 output_dir = op.join(project_dir, 'derivatives', 'ale')
 
-text_files_all = glob(op.join(project_dir, code, 'text-files', '*.txt'))
-text_files_trauma = glob(op.join(project_dir, code, 'text-files', '*TrauEgtPTSD*.txt'))
-text_files_hc = glob(op.join(project_dir, code, 'text-files', '*HCgtPTSD*.txt'))
+text_files_all = glob(op.join(project_dir, 'code', 'text-files', '*.txt'))
+text_files_trauma = glob(op.join(project_dir, 'code', 'text-files', '*TrauEgtPTSD*.txt'))
+text_files_hc = glob(op.join(project_dir, 'code', 'text-files', '*HCgtPTSD*.txt'))
 
 #Combined meta-analysis
 #Import all the text files to create a combined text file dataset
-dset = convert_sleuth_to_dataset(text_files_all, target="ale_2mm")
+dset = convert_sleuth_to_dataset(text_files_all, target="mni152_2mm")
 
 ale = ALE(kernel__fwhm=None)
 
@@ -27,12 +28,13 @@ corr = FWECorrector(
 )
 cres = corr.transform(results)
 
+prefix = 'TrauEgtPTSD+HCgtPTSD'
+
 cres.save_maps(output_dir=output_dir, prefix=prefix)
 
 os.makedirs(output_dir, exist_ok=True)
-prefix = 'combined'
 
-copyfile(sleuth_file, op.join(output_dir, prefix + "_input_coordinates.txt"))
+dset.save(op.join(output_dir, prefix + ".pkl.gz"))
 
 logp_img = nib.load(op.join(output_dir, '{prefix}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz'.format(prefix=prefix)))
 sig_inds = np.where(logp_img.get_fdata() > -np.log(0.05))
@@ -48,8 +50,8 @@ nib.save(z_img, op.join(output_dir, '{prefix}_z_corr-FWE_thresh-05.nii.gz'.forma
 
 
 #Individual meta-analyses and contrast
-dset1 = convert_sleuth_to_dataset(text_files_trauma, target="ale_2mm")
-dset2 = convert_sleuth_to_dataset(text_files_hc, target="ale_2mm")
+dset1 = convert_sleuth_to_dataset(text_files_trauma, target="mni152_2mm")
+dset2 = convert_sleuth_to_dataset(text_files_hc, target="mni152_2mm")
 
 ale1 = ALE(kernel__fwhm=None)
 ale2 = ALE(kernel__fwhm=None)
@@ -61,7 +63,7 @@ corr = FWECorrector(
 )
 cres1 = corr.transform(res1)
 cres2 = corr.transform(res2)
-sub = ALESubtraction(n_iters=n_iters)
+sub = ALESubtraction(n_iters=10000)
 sres = sub.fit(ale1, ale2)
 
 prefix1 = 'TrauEgtPTSD'
@@ -70,8 +72,8 @@ prefix3 = 'TrauEgtPTSD-HCgtPTSD'
 cres1.save_maps(output_dir=output_dir, prefix=prefix1)
 cres2.save_maps(output_dir=output_dir, prefix=prefix2)
 sres.save_maps(output_dir=output_dir, prefix=prefix3)
-copyfile(sleuth_file, op.join(output_dir, prefix + "_group1_input_coordinates.txt"))
-copyfile(sleuth_file2, op.join(output_dir, prefix + "_group2_input_coordinates.txt"))
+dset1.save(op.join(output_dir, prefix1 + ".pkl.gz"))
+dset2.save(op.join(output_dir, prefix2 + ".pkl.gz"))
 
 z_img = nib.load(op.join(output_dir, '{prefix}_z_desc-group1MinusGroup2.nii.gz'.format(prefix=prefix3)))
 
