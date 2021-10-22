@@ -11,6 +11,7 @@ from nimare.meta.ale import ALE, ALESubtraction
 
 
 def thresh_img(logp_img, z_img, p):
+    """Maps created with this are replaced with ones made by regenerate_thresholded_maps.py."""
     sig_inds = np.where(logp_img.get_fdata() > -np.log(p))
     z_img_data = z_img.get_fdata()
     z_img_thresh_data = np.zeros(z_img.shape)
@@ -19,14 +20,14 @@ def thresh_img(logp_img, z_img, p):
     return z_img
 
 
-project_dir = "/home/data/nbc/misc-projects/meta-analyses/meta-analysis_ptsd"
-output_dir = op.join(project_dir, "derivatives", "ale")
+PROJECT_DIR = "/home/data/nbc/misc-projects/meta-analyses/meta-analysis_ptsd"
+output_dir = op.join(PROJECT_DIR, "derivatives", "ale")
 
-text_files_all = glob(op.join(project_dir, "code", "text-files", "*.txt"))
+text_files_all = glob(op.join(PROJECT_DIR, "code", "text-files", "*.txt"))
 text_files_trauma = glob(
-    op.join(project_dir, "code", "text-files", "*TrauEgtPTSD*.txt")
+    op.join(PROJECT_DIR, "code", "text-files", "*TrauEgtPTSD*.txt")
 )
-text_files_hc = glob(op.join(project_dir, "code", "text-files", "*HCgtPTSD*.txt"))
+text_files_hc = glob(op.join(PROJECT_DIR, "code", "text-files", "*HCgtPTSD*.txt"))
 
 # Combined meta-analysis
 # Import all the text files to create a combined text file dataset
@@ -38,27 +39,25 @@ results = ale.fit(dset)
 corr = FWECorrector(method="montecarlo", n_iters=10000, voxel_thresh=0.001, n_cores=4)
 cres = corr.transform(results)
 
-prefix = "TrauEgtPTSD+HCgtPTSD"
+PREFIX_COMBINED = "TrauEgtPTSD+HCgtPTSD"
 
-cres.save_maps(output_dir=output_dir, prefix=prefix)
+cres.save_maps(output_dir=output_dir, prefix=PREFIX_COMBINED)
 
 os.makedirs(output_dir, exist_ok=True)
 
-dset.save(op.join(output_dir, prefix + ".pkl.gz"))
+dset.save(op.join(output_dir, PREFIX_COMBINED + ".pkl.gz"))
 
 z_img_logp = nib.load(
     op.join(
         output_dir,
-        "{prefix}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz".format(
-            prefix=prefix
-        ),
+        f"{PREFIX_COMBINED}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz",
     )
 )
-z_img = nib.load(op.join(output_dir, "{prefix}_z.nii.gz".format(prefix=prefix)))
+z_img = nib.load(op.join(output_dir, f"{PREFIX_COMBINED}_z.nii.gz"))
 z_img_thresh = thresh_img(z_img_logp, z_img, 0.05)
 nib.save(
     z_img_thresh,
-    op.join(output_dir, "{prefix}_z_corr-FWE_thresh-05.nii.gz".format(prefix=prefix)),
+    op.join(output_dir, f"{PREFIX_COMBINED}_z_corr-FWE_thresh-05.nii.gz"),
 )
 
 # Individual meta-analyses and contrast
@@ -76,59 +75,45 @@ cres2 = corr.transform(res2)
 sub = ALESubtraction(n_iters=10000)
 sres = sub.fit(ale1, ale2)
 
-prefix1 = "TrauEgtPTSD"
-prefix2 = "HCgtPTSD"
-prefix3 = "TrauEgtPTSD-HCgtPTSD"
-cres1.save_maps(output_dir=output_dir, prefix=prefix1)
-cres2.save_maps(output_dir=output_dir, prefix=prefix2)
-sres.save_maps(output_dir=output_dir, prefix=prefix3)
-dset1.save(op.join(output_dir, prefix1 + ".pkl.gz"))
-dset2.save(op.join(output_dir, prefix2 + ".pkl.gz"))
+PREFIX_TRAUMA = "TrauEgtPTSD"
+PREFIX_HC = "HCgtPTSD"
+PREFIX_DIFF = "TrauEgtPTSD-HCgtPTSD"
+cres1.save_maps(output_dir=output_dir, prefix=PREFIX_TRAUMA)
+cres2.save_maps(output_dir=output_dir, prefix=PREFIX_HC)
+sres.save_maps(output_dir=output_dir, prefix=PREFIX_DIFF)
+dset1.save(op.join(output_dir, PREFIX_TRAUMA + ".pkl.gz"))
+dset2.save(op.join(output_dir, PREFIX_HC + ".pkl.gz"))
 
 # get thresholded individual analyses
 z_img_group1_logp = nib.load(
     op.join(
         output_dir,
-        "{prefix1}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz".format(
-            prefix1=prefix1
-        ),
+        f"{PREFIX_TRAUMA}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz",
     )
 )
-z_img_group1 = nib.load(
-    op.join(output_dir, "{prefix1}_z.nii.gz".format(prefix1=prefix1))
-)
+z_img_group1 = nib.load(op.join(output_dir, f"{PREFIX_TRAUMA}_z.nii.gz"))
 z_img_group1_thresh = thresh_img(z_img_group1_logp, z_img_group1, 0.05)
 nib.save(
     z_img_group1_thresh,
-    op.join(
-        output_dir, "{prefix1}_z_corr-FWE_thresh-05.nii.gz".format(prefix1=prefix1)
-    ),
+    op.join(output_dir, f"{PREFIX_TRAUMA}_z_corr-FWE_thresh-05.nii.gz"),
 )
 
 z_img_group2_logp = nib.load(
     op.join(
         output_dir,
-        "{prefix2}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz".format(
-            prefix2=prefix2
-        ),
+        f"{PREFIX_HC}_logp_level-cluster_corr-FWE_method-montecarlo.nii.gz",
     )
 )
-z_img_group2 = nib.load(
-    op.join(output_dir, "{prefix2}_z.nii.gz".format(prefix2=prefix2))
-)
+z_img_group2 = nib.load(op.join(output_dir, f"{PREFIX_HC}_z.nii.gz"))
 z_img_group2_thresh = thresh_img(z_img_group2_logp, z_img_group2, 0.05)
 nib.save(
     z_img_group2_thresh,
-    op.join(
-        output_dir, "{prefix2}_z_corr-FWE_thresh-05.nii.gz".format(prefix2=prefix2)
-    ),
+    op.join(output_dir, f"{PREFIX_HC}_z_corr-FWE_thresh-05.nii.gz"),
 )
 
 # get thresholded contrast analyses
 z_img = nib.load(
-    op.join(
-        output_dir, "{prefix}_z_desc-group1MinusGroup2.nii.gz".format(prefix=prefix3)
-    )
+    op.join(output_dir, f"{PREFIX_COMBINED}_z_desc-group1MinusGroup2.nii.gz")
 )
 
 # for first direction
@@ -149,9 +134,7 @@ nib.save(
     z_img_group1_final,
     op.join(
         output_dir,
-        "{prefix1}-{prefix2}_z_thresh-05.nii.gz".format(
-            prefix1=prefix1, prefix2=prefix2
-        ),
+        f"{PREFIX_TRAUMA}-{PREFIX_HC}_z_thresh-05.nii.gz",
     ),
 )
 
@@ -167,8 +150,6 @@ nib.save(
     z_img_group2_final,
     op.join(
         output_dir,
-        "{prefix2}-{prefix1}_z_thresh-05.nii.gz".format(
-            prefix1=prefix1, prefix2=prefix2
-        ),
+        f"{PREFIX_HC}-{PREFIX_TRAUMA}_z_thresh-05.nii.gz",
     ),
 )
