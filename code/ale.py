@@ -9,6 +9,7 @@ from nimare.correct import FWECorrector
 from nimare.meta.ale import ALE, ALESubtraction
 
 def thresh_img(logp_img, z_img, p):
+    # Natural log was used until NiMARE 0.0.4, and this manuscript used 0.0.3.
     sig_inds = np.where(logp_img.get_fdata() > -np.log(p))
     z_img_data = z_img.get_fdata()
     z_img_thresh_data = np.zeros(z_img.shape)
